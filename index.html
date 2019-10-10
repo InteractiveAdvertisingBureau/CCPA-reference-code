@@ -1,0 +1,65 @@
+<html>
+
+<script src="./uspapi.js"></script>
+
+<h3>IAB Tech Lab U.S. Privacy API Reference Implementation</h3>
+Case 1: Business declared CCPA doesn't apply
+<br>
+<p id="section1"></p>
+<script>
+    // function to write the storage (us_privacy)
+    const EXDAYS = 30
+    function setCookie(cvalue = "1--") {
+    var d = new Date();
+    d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = "us_privacy" + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    // set cookie to "1--" to get started...
+    setCookie();
+
+    // check for user's optout
+    window.__uspapi("getuspdata", 1, function(consent, success) { 
+            if (success && consent.uspString === '1--') {
+                document.getElementById("section1").innerHTML = "uspstring = \"" + consent.uspString + "\" 🤔";
+            } else {
+                document.getElementById("section1").innerHTML = "error retrieving the uspString";
+            }
+            });
+</script>
+<br>
+Case 2: User didn't opt out, business as usual
+<br>
+<p id="section2"></p>
+<script>
+// set the cookie to "1YY"
+var tmpstr = "1YY"
+setCookie(tmpstr);
+    // check for user's optout
+    window.__uspapi("getuspdata", 1, function(consent, success) { 
+            if (success && consent.uspString === tmpstr) {
+                document.getElementById("section2").innerHTML = "uspString = \"" + consent.uspString + "\" 😊";
+            } else {
+                document.getElementById("section2").innerHTML = "error retrieving the uspString";
+            }
+            });
+</script>
+<br>
+Case 3: User did opt out, do not share data
+<br>
+<p id="section3"></p>
+<script>
+    // set the cookie to "1YY"
+    tmpstr = "1YN"
+    setCookie(tmpstr);
+    // check for user's optout
+    window.__uspapi("getuspdata", 1, function(consent, success) { 
+                if (success && consent.uspString === tmpstr) {
+                document.getElementById("section3").innerHTML = "uspString = \"" + consent.uspString + "\" 😟";
+                } else {
+                document.getElementById("section3").innerHTML = "error retrieving the uspString";
+                }
+            });
+</script>
+</html>
