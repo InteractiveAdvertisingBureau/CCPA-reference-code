@@ -27,6 +27,10 @@ File uspapi.js
 
 index.html
     Simple reference implementation using U.S. Privacy API
+    Note: this sample sets the cookie as a first part and secure. You will need HTTPS to get this to work. For debugging you can set the URL param debug=1 to make it work on HTTP, like http://localhost.
+
+index.html
+    Simple HTML to test all the API return calls
 
 README.md
     This document
@@ -35,7 +39,7 @@ Build notes:
 To build you need NPM. 
 Run npm install to install npm. 
 
-Run npm build:dev to build dev 
+Run npm run build:dev to build dev 
 Run npm start to build dev and start the web browser, loading the index.html.
 
 Currently only tested within dev and on Chrome.

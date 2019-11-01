@@ -53,8 +53,6 @@ var getuspdata = function(apiver, callback) {
     return;
   }
 
-  // TODO: check for CCPAApplies;
-
   // Get the data from the storage
   var str1 = null;
   if (str1 = getCookie("us_privacy")) {
