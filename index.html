@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        /* Split window */
+        .split {
+            height: 100%;
+            width: 20%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .left {
+            left: 0;
+            width: 80%;
+            background-color: #d7dbd8;
+        }
+
+        .right {
+            right: 0;
+            background-color: #6275e0;
+        }
+        
+        .centered {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: left;
+        }
+
+        .centered img {
+            width: 150px;
+        }
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 10%; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+        }
+        
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button {
+            border-style: groove;
+            text-align: center;
+            text-decoration: none;
+            padding: 5px 15px;
+            justify-content: center;
+            cursor: default;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>IAB Tech Lab U.S. Privacy API Reference Implementation</title>
+    <script src="./uspapi.js"></script>
+</head>
+
+<body>
+    <p id="demo"></p>
+    <script>
+        // global const
+        const EXDAYS = 30;
+        const USPSTR_NN = "1NN";
+        const USPSTR_YN = "1YN";
+        const USPSTR_YY = "1YY";
+        const USPSTR_NA = "1--";
+        const YES = 'Y';
+        const NO = 'N';
+    </script>
+    <!-- implementation for the content split frame -->
+    <div class="split left">
+        <div class="centered">
+            <h3>Nova diei</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <br>
+            <hr>
+            <br>
+            <p><center>
+                <a href="javascript:showModal();">Do not sell my data</a>  
+                <a href="../your.html">License Agreement</a>
+                <br>
+                <br>
+                <p><font size=2>IAB Tech Lab U.S. Privacy API Reference Implementation</font></p>
+            </p>
+        </div>
+    </div>
+        
+    <div class="split right">
+        <div class="centered img" id="split2">
+            <script>
+                window.__uspapi("getuspdata", 1, function(consent, success) { 
+                    if (success && consent.uspString.toUpperCase() != USPSTR_YY) {
+                        var img = document.createElement("IMG");
+                        img.src="https://cdn.pixabay.com/photo/2019/02/19/19/45/thumbs-up-4007573_960_720.png";
+                        document.getElementById("split2").appendChild(img);
+                    } else {
+                        document.getElementById("split2").innerHTML = "No user data permission.";
+                    }
+                });
+            </script>
+        </div>
+    </div>
+
+    <!-- implementation of sub dialog -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Do Not Sell My Data</h3>
+            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+            <p>
+            </p><input type="checkbox" id="DontSell">Do not sell my data
+            <p>
+            <input type="checkbox" id="IamAgent">I am an agent
+            <p align="center">
+                <botton id="ok" class="button">OK</botton>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // check for debug string in url param
+        debug = false;
+        if (window.location.search.toLowerCase().search("debug=1") == 1) {
+            debug = true;
+        }
+        // setCookie helper function - quick hack to sets a cookie
+        function setCookie(cvalue = USPSTR_DEFAULT) {
+            var d = new Date();
+            d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            secstr = debug ? "" : ";secure";
+            document.cookie = "us_privacy" + "=" 
+                + cvalue + ";" 
+                + expires 
+                + ";path=/"
+                + ";SameSite=Lax" + secstr;
+        }
+        // this section handles our "Do Not Sell" modal
+        var modal = document.getElementById("myModal");
+        var optoutstr = USPSTR_NN;
+        var DontSell = false;
+        var IsAgent = false;
+        // get the cookie value
+        window.__uspapi("getuspdata", 1, function(consent, success) { 
+            if (success) {
+                optoutstr = consent.uspString.toUpperCase();
+            }
+        });
+        // Check for previously store IsAgent value (localstorage)
+        if ((str1 = localStorage.getItem("IsAgent")) != null) {
+            IsAgent = str1 == 'true' ? true : false;
+        }
+        // show the modal
+        function showModal () {
+            optoutstr = optoutstr.charAt(0) + 'Y' + (optoutstr.charAt(2) == '-' ? 'N' : optoutstr.charAt(2)); // notice shown
+            document.getElementById("DontSell").checked = DontSell = optoutstr[2] == 'Y' ? true : false;
+            document.getElementById("IamAgent").checked = IsAgent;
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        }
+        // When the user clicks on <span> (x), close the modal
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            // document.getElementById("IamAgent").checked = IsAgent = false;
+            modal.style.display = "none";
+        }
+        // When the user clicks the ok button
+        document.getElementById("ok").onclick = function() {
+            if (DontSell)
+                optoutstr = USPSTR_YY;
+            else if (IsAgent)
+                optoutstr = USPSTR_NN;
+            else
+                optoutstr = USPSTR_YN;
+            setCookie(optoutstr);
+            localStorage.setItem("IsAgent", IsAgent);
+            modal.style.display = "none";
+            window.location.reload(); // for the demo refresh the page, the left bar changes based on user selection
+        }
+        // when the user clicks the do not sell check box, set the cookie var
+        document.getElementById("DontSell").onclick = function() {
+            if (IsAgent === false && document.getElementById("DontSell").checked)
+                DontSell = true;
+            else if (IsAgent === true) 
+                document.getElementById("DontSell").checked = DontSell = false;
+            else 
+                DontSell = false;
+        }
+        // when the user clicks the do not sell check box, set the agent flag
+        document.getElementById("IamAgent").onclick = function() {
+            if ((IsAgent = document.getElementById("IamAgent").checked) === true) {
+                document.getElementById("DontSell").checked = DontSell = false;
+            }
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>     
+</html>

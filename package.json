@@ -1,0 +1,59 @@
+{
+  "name": "uspapi",
+  "version": "1.0.0",
+  "description": "Reference implementation for IAB U.S. Privacy API",
+  "homepage": "https://github.com/InteractiveAdvertisingBureau/CCPA-reference-code",
+  "repository": "https://github.com/InteractiveAdvertisingBureau/CCPA-reference-code",
+  "keywords": [
+    "ccpa",
+    "uspapi",
+    "iab"
+  ],
+  "license": "MIT",
+  "main": "prod/uspapi.js",
+  "files": [
+    "prod"
+  ],
+  "scripts": {
+    "test": "mocha test/ --recursive",
+    "coverage": "nyc --reporter=html --reporter=text-summary --reporter=lcov --check-coverage --lines 60 --functions 60 --branches 60 mocha test/ --recursive",
+    "lint": "eslint src/. test/.",
+    "docs": "jsdoc -c .jsdoc.js -r",
+    "build:dev": "webpack --env dev",
+    "build:test": "webpack --env test",
+    "build:prod": "webpack --env prod",
+    "start": "webpack-dev-server --open --env dev",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "base-64": "^0.1.0"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.5.2",
+    "chai": "^4.0.2",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.0.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^2.30.1",
+    "jsdoc": "^3.5.5",
+    "mocha": "^3.4.2",
+    "ndb": "^1.1.4",
+    "nyc": "^11.0.2",
+    "sinon": "^4.5.0",
+    "url-loader": "^1.0.1",
+    "wdio-browserstack-service": "^0.1.16",
+    "wdio-jasmine-framework": "^0.3.5",
+    "wdio-selenium-standalone-service": "0.0.10",
+    "wdio-static-server-service": "^1.0.1",
+    "wdio-webpack-dev-server-service": "^1.2.0",
+    "wdio-webpack-service": "^1.0.1",
+    "webdriverio": "^4.13.1",
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^2.11.5",
+    "webpack-merge": "^4.1.3"
+  }
+}
