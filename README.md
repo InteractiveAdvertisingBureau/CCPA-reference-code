@@ -15,7 +15,8 @@ File usprivacy-string.js
     
     Example: “1YY1” Version 1, Notice given, Opted out.
     
-    Default is "1--1"
+    Default is null.
+
 File uspapi.js
     Implements the IAB tech lab U.S. Privacy API reference implementation
 
