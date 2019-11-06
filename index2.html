@@ -9,19 +9,19 @@ Case 1: Business declared CCPA doesn't apply
 <script>
     // function to write the storage (us_privacy)
     const EXDAYS = 30
-    function setCookie(cvalue = "1--") {
+    function setCookie(cvalue = "1--1") {
         var d = new Date();
         d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
         var expires = "expires="+ d.toUTCString();
         document.cookie = "us_privacy" + "=" + cvalue + ";" + expires + ";path=/";
     }
 
-    // set cookie to "1--" to get started...
+    // set cookie to "1--1" to get started...
     setCookie();
 
     // check for user's optout
     window.__uspapi("getuspdata", 1, function(consent, success) { 
-            if (success && consent.uspString === '1--') {
+            if (success && consent.uspString === '1--1') {
                 document.getElementById("section1").innerHTML = "uspstring = \"" + consent.uspString + "\" 🤔";
             } else {
                 document.getElementById("section1").innerHTML = "error retrieving the uspString";
@@ -33,8 +33,8 @@ Case 2: User didn't opt out, business as usual
 <br>
 <p id="section2"></p>
 <script>
-// set the cookie to "1YY"
-    var tmpstr = "1YY";
+// set the cookie to "1YY1"
+    var tmpstr = "1YY1";
     setCookie(tmpstr);
     // check for user's optout
     window.__uspapi("getuspdata", 1, function(consent, success) { 
@@ -50,8 +50,8 @@ Case 3: User did opt out, do not share data
 <br>
 <p id="section3"></p>
 <script>
-    // set the cookie to "1YY"
-    tmpstr = "1YN"
+    // set the cookie to "1YY1"
+    tmpstr = "1YN1"
     setCookie(tmpstr);
     // check for user's optout
     window.__uspapi("getuspdata", 1, function(consent, success) { 

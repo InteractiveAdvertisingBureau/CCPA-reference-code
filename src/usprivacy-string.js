@@ -16,23 +16,27 @@
  **/
 const UsprivacyRegExp = /^[nNyY-]{1}$/;
 const UsprivacyVersionRegExp = /^[1]{1}$/;
+const UsprivacyBoolean = /^[01]{01}$/;
+const MAXLENGTH = 4;
 
 class UsprivacyString {
   constructor() {
     this.version = 1;
     this.noticegiven = '-';
-    this.optedout ='-';
-    this.baseString = this.version.toString() + this.noticegiven + this.optedout;
+    this.optedout = '-';
+    this.restrictToSignatories = 1;
+    this.baseString = null; // default is null
   }
   
   // getUsprivacyString()
   // return the usprivacy string or null if an error occurs
   getUsprivacyString() {
     if (   !this.baseString
-        || this.baseString.length != 3
-        || !UsprivacyVersionRegExp.test(parseInt(this.baseString, 0)) 
-        || !UsprivacyRegExp.test(this.baseString[1]) 
-        || !UsprivacyRegExp.test(this.baseString[2]) ) {
+        || this.baseString.length !== MAXLENGTH
+        || !UsprivacyVersionRegExp.test(parseInt(this.baseString[0]))
+        || !UsprivacyRegExp.test(this.baseString[1])
+        || !UsprivacyRegExp.test(this.baseString[2])
+        || !UsprivacyBoolean.test(parseInt(this.baseString[3])) ) {
             return null
         } else {
             return this.baseString;
@@ -44,15 +48,17 @@ class UsprivacyString {
   // returns true if success otherwise false
   setUsprivacyString(newstr) {
     if (   !newstr
-        || newstr.length != 3
-        || !UsprivacyVersionRegExp.test(parseInt(newstr, 0)) 
+        || newstr.length !== MAXLENGTH
+        || !UsprivacyVersionRegExp.test(parseInt(newstr[0]))
         || !UsprivacyRegExp.test(newstr[1]) 
-        || !UsprivacyRegExp.test(newstr[2]) ) {
+        || !UsprivacyRegExp.test(newstr[2])
+        || !UsprivacyBoolean.test(parseInt(newstr[3])) ) {
             return false;
         } else {
-            this.version = parseInt(newstr, 0);
+            this.version = parseInt(newstr[0]);
             this.noticegiven = newstr[1];
             this.optedout = newstr[2];
+            this.restrictToSignatories = parseInt(newstr[3]);
             this.baseString = newstr;
             return true;
         }

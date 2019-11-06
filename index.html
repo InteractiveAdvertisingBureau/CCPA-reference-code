@@ -98,7 +98,9 @@
         const USPSTR_NN = "1NN";
         const USPSTR_YN = "1YN";
         const USPSTR_YY = "1YY";
-        const USPSTR_NA = "1--";
+        const USPSTR_YY0 = "1YY0";
+        const USPSTR_NY0 = "1NY0";
+        const USPSTR_NA = "1--1";
         const YES = 'Y';
         const NO = 'N';
     </script>
@@ -123,13 +125,25 @@
     <div class="split right">
         <div class="centered img" id="split2">
             <script>
+                /* dummy execAdTag function, for illustration only */
+                function execAdTag() {
+                    var img = document.createElement("IMG");
+                    img.src="https://cdn.pixabay.com/photo/2019/02/19/19/45/thumbs-up-4007573_960_720.png";
+                    document.getElementById("split2").appendChild(img);
+                }
                 window.__uspapi("getuspdata", 1, function(consent, success) { 
-                    if (success && consent.uspString.toUpperCase() != USPSTR_YY) {
-                        var img = document.createElement("IMG");
-                        img.src="https://cdn.pixabay.com/photo/2019/02/19/19/45/thumbs-up-4007573_960_720.png";
-                        document.getElementById("split2").appendChild(img);
+                    if (   success
+                        && consent.uspString.toUpperCase() !== USPSTR_YY0
+                        && consent.uspString.toUpperCase() !== USPSTR_NY0) {
+                        if (consent.uspString.toUpperCase()[2] === YES)
+                            document.getElementById("split2").innerHTML = "I am cool with the ad but don't use my data for other purposes.";
+                        execAdTag();
                     } else {
-                        document.getElementById("split2").innerHTML = "No user data permission.";
+                        /* string is null we decided to still show the ad */
+                        if (!consent.uspString)
+                            execAdTag();
+                        else
+                            document.getElementById("split2").innerHTML = "No user data permission.";
                     }
                 });
             </script>
@@ -155,9 +169,14 @@
 
     <script>
         // check for debug string in url param
-        debug = false;
-        if (window.location.search.toLowerCase().search("debug=1") == 1) {
+        var debug = false;
+        if (window.location.search.toLowerCase().search("debug=1") !== -1) {
             debug = true;
+        }
+        // set restrictToSignatories
+        var restrictToSignatories = 1;
+        if (window.location.search.toLowerCase().search("signatory=0") !== -1) {
+            restrictToSignatories = 0;
         }
         // setCookie helper function - quick hack to sets a cookie
         function setCookie(cvalue = USPSTR_DEFAULT) {
@@ -173,23 +192,24 @@
         }
         // this section handles our "Do Not Sell" modal
         var modal = document.getElementById("myModal");
-        var optoutstr = USPSTR_NN;
+        var optoutstr = USPSTR_NN + restrictToSignatories.toString();
         var DontSell = false;
         var IsAgent = false;
         // get the cookie value
         window.__uspapi("getuspdata", 1, function(consent, success) { 
             if (success) {
                 optoutstr = consent.uspString.toUpperCase();
+                restrictToSignatories = parseInt(optoutstr[3]);
             }
         });
         // Check for previously store IsAgent value (localstorage)
-        if ((str1 = localStorage.getItem("IsAgent")) != null) {
+        if ((str1 = localStorage.getItem("IsAgent")) !== null) {
             IsAgent = str1 == 'true' ? true : false;
         }
         // show the modal
         function showModal () {
-            optoutstr = optoutstr.charAt(0) + 'Y' + (optoutstr.charAt(2) == '-' ? 'N' : optoutstr.charAt(2)); // notice shown
-            document.getElementById("DontSell").checked = DontSell = optoutstr[2] == 'Y' ? true : false;
+            optoutstr = optoutstr.charAt(0) + 'Y' + (optoutstr.charAt(2) === '-' ? 'N' : optoutstr.charAt(2)); // notice shown
+            document.getElementById("DontSell").checked = DontSell = optoutstr[2] === 'Y' ? true : false;
             document.getElementById("IamAgent").checked = IsAgent;
             var modal = document.getElementById("myModal");
             modal.style.display = "block";
@@ -208,7 +228,7 @@
                 optoutstr = USPSTR_NN;
             else
                 optoutstr = USPSTR_YN;
-            setCookie(optoutstr);
+            setCookie(optoutstr + restrictToSignatories.toString());
             localStorage.setItem("IsAgent", IsAgent);
             modal.style.display = "none";
             window.location.reload(); // for the demo refresh the page, the left bar changes based on user selection
@@ -230,7 +250,7 @@
         }
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
-            if (event.target == modal) {
+            if (event.target === modal) {
                 modal.style.display = "none";
             }
         }

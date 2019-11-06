@@ -1,4 +1,3 @@
-
 /**
  * IAB's Reference UspAPI reference implementation
  **/
@@ -12,17 +11,17 @@ var pendingCalls = [];
 var uspString = new UsprivacyString();
 
 // helper functions
-function getCookie(cname) {
-  var name = cname + "=";
+function getCookie(cookiename) {
+  var name = cookiename + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
+  var cookiearray = decodedCookie.split(';');
+  for(var i = 0; i < cookiearray.length; i++) {
+    var cookie = cookiearray[i];
+    while (cookie.charAt(0) == ' ') {
+      cookie = cookie.substring(1);
     }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
+    if (cookie.indexOf(name) == 0) {
+      return cookie.substring(name.length, cookie.length);
     }
   }
   return "";
