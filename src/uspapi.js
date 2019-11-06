@@ -15,7 +15,7 @@ function getCookie(cookiename) {
   var name = cookiename + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var cookiearray = decodedCookie.split(';');
-  for(var i = 0; i < cookiearray.length; i++) {
+  for (var i = 0; i < cookiearray.length; i++) {
     var cookie = cookiearray[i];
     while (cookie.charAt(0) == ' ') {
       cookie = cookie.substring(1);
@@ -25,7 +25,7 @@ function getCookie(cookiename) {
     }
   }
   return "";
-};
+}
 
 const executePendingCalls = function(pendingCallbacks) {
   // run any pending calls
@@ -37,7 +37,7 @@ const executePendingCalls = function(pendingCallbacks) {
       }
       window.__uspapi.apply(null, cmd);
     } catch (nfe) {
-      logError('Error running pending call', nfe);
+      console.log('Error running pending call: ' + nfe);
     }
   }
 };
@@ -49,20 +49,20 @@ var getuspdata = function(apiver, callback) {
     apiver != API_VERSION
   ) {
     if (typeof callback === 'function') callback(null, false);
-    return;
+        return;
   }
 
   // Get the data from the storage
   var str1 = null;
-  if (str1 = getCookie("us_privacy")) {
+  if ((str1 = getCookie("us_privacy"))) {
       if (!uspString.setUsprivacyString(str1)) {
-        console.log("Warning: uspString not set.");
+          console.log("Warning: uspString not set.");
       }
   } 
 
   // get the uspstring and stuff it into the uspdata object
   var str = null;
-  if (str = uspString.getUsprivacyString()) {
+  if ((str = uspString.getUsprivacyString())) {
     if (typeof callback === 'function') {
           callback(
             {
@@ -88,8 +88,6 @@ var getuspdata = function(apiver, callback) {
 /**
  * U.S. Privacy API implementation
  */
-var pendingCalls = [];
-
 window.__uspapi = new function (win) {
   if (win.__uspapi) {
     try {
@@ -98,7 +96,7 @@ window.__uspapi = new function (win) {
         return win.__uspapi;
       } else {
         // Making a call to __uspapi with no arguments will return the pending calls;
-        pendingCalls = __uspapi() || [];
+        pendingCalls = win.__uspapi() || [];
       }
     } catch (nfe) {
       return win.__uspapi;
@@ -115,6 +113,6 @@ window.__uspapi = new function (win) {
   };
 
   return api;
-}(window);
+} (window);
 
 executePendingCalls(pendingCalls);
