@@ -7,13 +7,13 @@ File usprivacy-string.js
     The class contains the methods to get/set the usprivacy string 
     and a method to get the current version.
     
-    The usprivacy string as the format: ”vnos” where
+    The usprivacy string as the format: ”vnol” where
     v = version (int)
     n = Notice Given (char)
     o = OptedOut (char)
-    s = restrictToSignatories (int)
+    l = Lspact (char)
     
-    Example: “1YY1” Version 1, Notice given, Opted out.
+    Example: “1YY1” Version 1, Notice given, Opted out, under Lspact.
     
     Default is null.
 
@@ -28,7 +28,7 @@ File uspapi.js
 
 index.html
     Simple reference implementation using U.S. Privacy API
-    Set param signature=0 to set yourself as a none signatory
+    Set param lspact=0 to set yourself as a none signatory
     Note: this sample sets the cookie as a first party and secure. You will need HTTPS to get this to work. For debugging you can set the URL param debug=1 to make it work on HTTP, like http://localhost.
 
 index.html

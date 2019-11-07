@@ -98,9 +98,9 @@
         const USPSTR_NN = "1NN";
         const USPSTR_YN = "1YN";
         const USPSTR_YY = "1YY";
-        const USPSTR_YY0 = "1YY0";
-        const USPSTR_NY0 = "1NY0";
-        const USPSTR_NA = "1--1";
+        const USPSTR_YYN = "1YYN";
+        const USPSTR_NYN = "1NYN";
+        const USPSTR_NA = "1---";
         const YES = 'Y';
         const NO = 'N';
     </script>
@@ -133,8 +133,8 @@
                 }
                 window.__uspapi("getuspdata", 1, function(consent, success) { 
                     if (   success
-                        && consent.uspString.toUpperCase() !== USPSTR_YY0
-                        && consent.uspString.toUpperCase() !== USPSTR_NY0) {
+                        && consent.uspString.toUpperCase() !== USPSTR_YYN
+                        && consent.uspString.toUpperCase() !== USPSTR_NYN) {
                         if (consent.uspString.toUpperCase()[2] === YES)
                             document.getElementById("split2").innerHTML = "I am cool with the ad but don't use my data for other purposes.";
                         execAdTag();
@@ -173,10 +173,10 @@
         if (window.location.search.toLowerCase().search("debug=1") !== -1) {
             debug = true;
         }
-        // set restrictToSignatories
-        var restrictToSignatories = 1;
-        if (window.location.search.toLowerCase().search("signatory=0") !== -1) {
-            restrictToSignatories = 0;
+        // set lspact
+        var lspact = YES;
+        if (window.location.search.toLowerCase().search("lspact=0") !== -1) {
+            lspact = NO;
         }
         // setCookie helper function - quick hack to sets a cookie
         function setCookie(cvalue = USPSTR_DEFAULT) {
@@ -192,14 +192,14 @@
         }
         // this section handles our "Do Not Sell" modal
         var modal = document.getElementById("myModal");
-        var optoutstr = USPSTR_NN + restrictToSignatories.toString();
+        var optoutstr = USPSTR_NN + lspact;
         var DontSell = false;
         var IsAgent = false;
         // get the cookie value
         window.__uspapi("getuspdata", 1, function(consent, success) { 
             if (success) {
                 optoutstr = consent.uspString.toUpperCase();
-                restrictToSignatories = parseInt(optoutstr[3]);
+                lspact = optoutstr[3];
             }
         });
         // Check for previously store IsAgent value (localstorage)
@@ -228,7 +228,7 @@
                 optoutstr = USPSTR_NN;
             else
                 optoutstr = USPSTR_YN;
-            setCookie(optoutstr + restrictToSignatories.toString());
+            setCookie(optoutstr + lspact);
             localStorage.setItem("IsAgent", IsAgent);
             modal.style.display = "none";
             window.location.reload(); // for the demo refresh the page, the left bar changes based on user selection

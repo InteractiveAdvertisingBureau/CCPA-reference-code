@@ -9,19 +9,19 @@ Case 1: Business declared CCPA doesn't apply
 <script>
     // function to write the storage (us_privacy)
     const EXDAYS = 30
-    function setCookie(cvalue = "1--1") {
+    function setCookie(cvalue = "1---") {
         var d = new Date();
         d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
         var expires = "expires="+ d.toUTCString();
         document.cookie = "us_privacy" + "=" + cvalue + ";" + expires + ";path=/";
     }
 
-    // set cookie to "1--1" to get started...
+    // set cookie to "1---" to get started...
     setCookie();
 
     // check for user's optout
     window.__uspapi("getuspdata", 1, function(consent, success) { 
-            if (success && consent.uspString === '1--1') {
+            if (success && consent.uspString === '1---') {
                 document.getElementById("section1").innerHTML = "uspstring = \"" + consent.uspString + "\" 🤔";
             } else {
                 document.getElementById("section1").innerHTML = "error retrieving the uspString";
