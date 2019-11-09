@@ -11,7 +11,7 @@
  *  n = Notice Given
  *  o = OptedOut
  *  l = lspact (Limited Service Provider Agreement Covered Transaction)
- * Example: “1YY1” Version 1, Notice given, Opted out, LSAPCT in place.
+ * Example: “1YYY” Version 1, Notice given, Opted out, LSAPCT in place.
  * Default is null.
  * 
  **/

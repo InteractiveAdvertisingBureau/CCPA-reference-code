@@ -13,7 +13,7 @@ File usprivacy-string.js
     o = OptedOut (char)
     l = Lspact (char)
     
-    Example: “1YY1” Version 1, Notice given, Opted out, under Lspact.
+    Example: “1YYY” Version 1, Notice given, Opted out, under Lspact.
     
     Default is null.
 
