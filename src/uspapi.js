@@ -7,11 +7,11 @@ import UsprivacyString from './usprivacy-string';
 
 // global vars
 const API_VERSION = 1;
-var pendingCalls = [];
-var uspString = new UsprivacyString();
+let pendingCalls = [];
+let uspString = new UsprivacyString();
 
 // helper functions
-function getCookie(cookiename) {
+let getCookie = function(cookiename) {
   var name = cookiename + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var cookiearray = decodedCookie.split(';');
@@ -25,35 +25,39 @@ function getCookie(cookiename) {
     }
   }
   return "";
-}
+};
 
 const executePendingCalls = function(pendingCallbacks) {
-  // run any pending calls
-  while (pendingCallbacks.length > 0) {
-    try {
-      var cmd = pendingCallbacks.shift();
-      if (!cmd) {
-        continue;
+  // run any pending calls if there are any queued pending callbacks
+  if (pendingCallbacks.length) {
+    pendingCallbacks.forEach(function(cmd) {
+      try {
+          if (cmd) {
+            window.__usapi.apply(null, cmd);
+          }
+      } catch (nfe) {
+          console.error('Error running pending call: ' + nfe);
       }
-      window.__uspapi.apply(null, cmd);
-    } catch (nfe) {
-      console.log('Error running pending call: ' + nfe);
-    }
+    });
+
+  // Reset the queue (changing where the variable points to in memory)
+    pendingCallbacks = [];
   }
 };
 
-var getuspdata = function(apiver, callback) {
+let getuspdata = function(apiver, callback) {
   if (
     apiver !== null &&
     apiver !== undefined &&
     apiver != API_VERSION
   ) {
-    if (typeof callback === 'function') callback(null, false);
-        return;
+    if (typeof callback === 'function') 
+      callback(null, false);
+    return;
   }
 
   // Get the data from the storage
-  var str1 = null;
+  let str1 = null;
   if ((str1 = getCookie("us_privacy"))) {
       if (!uspString.setUsprivacyString(str1)) {
           console.log("Warning: uspString not set.");
@@ -61,7 +65,7 @@ var getuspdata = function(apiver, callback) {
   } 
 
   // get the uspstring and stuff it into the uspdata object
-  var str = null;
+  let str = null;
   if ((str = uspString.getUsprivacyString())) {
     if (typeof callback === 'function') {
           callback(
@@ -103,7 +107,7 @@ window.__uspapi = new function (win) {
     }
   }
 
-  var api = function (cmd) {
+  let api = function (cmd) {
     return {
       getuspdata: getuspdata,
       __uspapi: function () {

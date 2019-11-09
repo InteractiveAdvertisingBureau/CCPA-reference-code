@@ -127,7 +127,7 @@
             <script>
                 /* dummy execAdTag function, for illustration only */
                 function execAdTag() {
-                    var img = document.createElement("IMG");
+                    let img = document.createElement("IMG");
                     img.src="https://cdn.pixabay.com/photo/2019/02/19/19/45/thumbs-up-4007573_960_720.png";
                     document.getElementById("split2").appendChild(img);
                 }
@@ -169,20 +169,20 @@
 
     <script>
         // check for debug string in url param
-        var debug = false;
+        let debug = false;
         if (window.location.search.toLowerCase().search("debug=1") !== -1) {
             debug = true;
         }
         // set lspact
-        var lspact = YES;
+        let lspact = YES;
         if (window.location.search.toLowerCase().search("lspact=0") !== -1) {
             lspact = NO;
         }
         // setCookie helper function - quick hack to sets a cookie
         function setCookie(cvalue = USPSTR_DEFAULT) {
-            var d = new Date();
+            let d = new Date();
             d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
-            var expires = "expires="+ d.toUTCString();
+            let expires = "expires="+ d.toUTCString();
             secstr = debug ? "" : ";secure";
             document.cookie = "us_privacy" + "=" 
                 + cvalue + ";" 
@@ -191,10 +191,10 @@
                 + ";SameSite=Lax" + secstr;
         }
         // this section handles our "Do Not Sell" modal
-        var modal = document.getElementById("myModal");
-        var optoutstr = USPSTR_NN + lspact;
-        var DontSell = false;
-        var IsAgent = false;
+        let modal = document.getElementById("myModal");
+        let optoutstr = USPSTR_NN + lspact;
+        let DontSell = false;
+        let IsAgent = false;
         // get the cookie value
         window.__uspapi("getuspdata", 1, function(consent, success) { 
             if (success) {
@@ -211,11 +211,11 @@
             optoutstr = optoutstr.charAt(0) + 'Y' + (optoutstr.charAt(2) === '-' ? 'N' : optoutstr.charAt(2)); // notice shown
             document.getElementById("DontSell").checked = DontSell = optoutstr[2] === 'Y' ? true : false;
             document.getElementById("IamAgent").checked = IsAgent;
-            var modal = document.getElementById("myModal");
+            let modal = document.getElementById("myModal");
             modal.style.display = "block";
         }
         // When the user clicks on <span> (x), close the modal
-        var span = document.getElementsByClassName("close")[0];
+        let span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
             // document.getElementById("IamAgent").checked = IsAgent = false;
             modal.style.display = "none";
