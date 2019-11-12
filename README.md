@@ -7,16 +7,17 @@ File usprivacy-string.js
     The class contains the methods to get/set the usprivacy string 
     and a method to get the current version.
     
-    The usprivacy string as the format: ”vno” where 
-    v = version
-    n = Notice Given
-    o = OptedOut
+    The usprivacy string as the format: ”vnol” where
+    v = version (int)
+    n = Notice Given (char)
+    o = OptedOut (char)
+    l = Lspact (char)
     
-    Example: “1YY” Version 1, Notice given, Opted out.
+    Example: “1YYY” Version 1, Notice given, Opted out, under Lspact.
     
-    Default is "1--".
+    Default is null.
 
-File uspapi.js 
+File uspapi.js
     Implements the IAB tech lab U.S. Privacy API reference implementation
 
     __uspapi("getuspdata", version, callback)
@@ -27,7 +28,8 @@ File uspapi.js
 
 index.html
     Simple reference implementation using U.S. Privacy API
-    Note: this sample sets the cookie as a first part and secure. You will need HTTPS to get this to work. For debugging you can set the URL param debug=1 to make it work on HTTP, like http://localhost.
+    Set param lspact=0 to set yourself as a none signatory
+    Note: this sample sets the cookie as a first party and secure. You will need HTTPS to get this to work. For debugging you can set the URL param debug=1 to make it work on HTTP, like http://localhost.
 
 index.html
     Simple HTML to test all the API return calls

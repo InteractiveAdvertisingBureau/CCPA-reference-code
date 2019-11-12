@@ -52,7 +52,7 @@ const envSpecificConfig = (env) =>
       {
         plugins: [
           new CleanWebpackPlugin([path.resolve('build', env)]),
-          new UglifyJSPlugin()
+          // new UglifyJSPlugin()
         ]
       };
 

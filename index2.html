@@ -9,19 +9,19 @@ Case 1: Business declared CCPA doesn't apply
 <script>
     // function to write the storage (us_privacy)
     const EXDAYS = 30
-    function setCookie(cvalue = "1--") {
-        var d = new Date();
+    function setCookie(cvalue = "1---") {
+        let d = new Date();
         d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
-        var expires = "expires="+ d.toUTCString();
+        let expires = "expires="+ d.toUTCString();
         document.cookie = "us_privacy" + "=" + cvalue + ";" + expires + ";path=/";
     }
 
-    // set cookie to "1--" to get started...
+    // set cookie to "1---" to get started...
     setCookie();
 
     // check for user's optout
     window.__uspapi("getuspdata", 1, function(consent, success) { 
-            if (success && consent.uspString === '1--') {
+            if (success && consent.uspString === '1---') {
                 document.getElementById("section1").innerHTML = "uspstring = \"" + consent.uspString + "\" 🤔";
             } else {
                 document.getElementById("section1").innerHTML = "error retrieving the uspString";
@@ -29,34 +29,34 @@ Case 1: Business declared CCPA doesn't apply
     });
 </script>
 <br>
-Case 2: User didn't opt out, business as usual
+Case 2: User did opt out, do not share data
 <br>
 <p id="section2"></p>
 <script>
-// set the cookie to "1YY"
-    var tmpstr = "1YY";
+// set the cookie to "1YYY"
+    let tmpstr = "1YYY";
     setCookie(tmpstr);
     // check for user's optout
     window.__uspapi("getuspdata", 1, function(consent, success) { 
             if (success && consent.uspString === tmpstr) {
-                document.getElementById("section2").innerHTML = "uspString = \"" + consent.uspString + "\" 😊";
+                document.getElementById("section2").innerHTML = "uspString = \"" + consent.uspString + "\" 😟";
             } else {
                 document.getElementById("section2").innerHTML = "error retrieving the uspString";
             }
     });
 </script>
 <br>
-Case 3: User did opt out, do not share data
+Case 3: User didn't opt out, business as usual
 <br>
 <p id="section3"></p>
 <script>
-    // set the cookie to "1YY"
-    tmpstr = "1YN"
+    // set the cookie to "1YNY"
+    tmpstr = "1YNY"
     setCookie(tmpstr);
     // check for user's optout
     window.__uspapi("getuspdata", 1, function(consent, success) { 
                 if (success && consent.uspString === tmpstr) {
-                document.getElementById("section3").innerHTML = "uspString = \"" + consent.uspString + "\" 😟";
+                document.getElementById("section3").innerHTML = "uspString = \"" + consent.uspString + "\" 😊";
                 } else {
                 document.getElementById("section3").innerHTML = "error retrieving the uspString";
                 }
