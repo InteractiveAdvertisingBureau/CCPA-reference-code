@@ -26,24 +26,6 @@ let getCookie = function(cookiename) {
   return "";
 };
 
-const executePendingCalls = function(pendingCallbacks) {
-  // run any pending calls if there are any queued pending callbacks
-  if (pendingCallbacks.length) {
-    pendingCallbacks.forEach(function(cmd) {
-      try {
-          if (cmd) {
-            window.__usapi.apply(null, cmd);
-          }
-      } catch (nfe) {
-          console.error('Error running pending call: ' + nfe);
-      }
-    });
-
-  // Reset the queue (changing where the variable points to in memory)
-    pendingCallbacks = [];
-  }
-};
-
 let getuspdata = function(apiver, callback) {
   if (typeof callback === 'function') {
     if (
@@ -122,5 +104,3 @@ window.__uspapi = new function (win) {
 
   return api;
 } (window);
-
-// executePendingCalls(pendingCalls);
