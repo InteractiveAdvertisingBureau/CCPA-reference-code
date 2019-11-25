@@ -116,7 +116,7 @@ window.__uspapi = new function (win) {
       } [cmd].apply(null, [].slice.call(arguments, 1));
     }
     catch (err) {
-      console.error("Invalid command: ", cmd)
+      console.error("__uspapi: Invalid command: ", cmd)
     }
   };
 
