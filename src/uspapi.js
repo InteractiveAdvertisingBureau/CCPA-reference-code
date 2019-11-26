@@ -120,3 +120,22 @@ window.__uspapi = new function (win) {
 } (window);
 
 executePendingCalls(pendingCalls);
+
+// register postMessage handler
+function __handleUspapiMessage (event) {
+  const data = event && event.data && event.data.__uspapiCall;
+  if (data) {
+    window.__uspapi(data.command, data.version, (returnValue, success) => {
+      event.source.postMessage({
+        __uspapiReturn: {
+          returnValue,
+          success,
+          callId: data.callId
+        }
+      });
+    });
+  }
+}
+
+const listen = window.attachEvent || window.addEventListener;
+listen('message', __handleUspapiMessage, false);
