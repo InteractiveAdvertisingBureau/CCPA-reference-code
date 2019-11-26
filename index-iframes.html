@@ -1,0 +1,43 @@
+<html>
+<!-- This HTML file is to test the different uspapi.js retun values only -->
+<script src="./uspapi.js"></script>
+
+<h3>IAB Tech Lab U.S. Privacy API Reference Implementation</h3>
+
+<h4>Case 1: Business declared CCPA doesn't apply</h4>
+<div id="iframe1">Please wait...</div>
+<script>
+    // function to write the storage (us_privacy)
+    const EXDAYS = 30
+    function setCookie(cvalue = "1---") {
+        let d = new Date();
+        d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = "us_privacy" + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    // set cookie to "1---" to get started...
+    setCookie();
+    document.getElementById('iframe1').innerHTML = '<iframe style="width: 600px; height: 100px; border:1px solid #000000;" src="iframe.html"></iframe>';
+</script>
+
+<h4>Case 2: User did opt out, do not share data</h4>
+<div id="iframe2">Please wait...</div>
+<script>
+// set the cookie to "1YYY"
+    setTimeout(() => {
+        let tmpstr = "1YYY";
+        setCookie(tmpstr);
+        document.getElementById('iframe2').innerHTML = '<iframe style="width: 600px; height: 100px; border:1px solid #000000;" src="iframe.html"></iframe>';
+    }, 1000);
+</script>
+<h4>Case 3: User didn't opt out, business as usual</h4>
+<div id="iframe3">Please wait...</div>
+<script>
+    // set the cookie to "1YNY"
+    setTimeout(() => {
+        tmpstr = "1YNY"
+        setCookie(tmpstr);
+        document.getElementById('iframe3').innerHTML = '<iframe style="width: 600px; height: 100px; border:1px solid #000000;" src="iframe.html"></iframe>';
+    }, 2000);
+</script>
+</html>
