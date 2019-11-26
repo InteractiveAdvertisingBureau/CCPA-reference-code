@@ -131,7 +131,7 @@
                     img.src="https://cdn.pixabay.com/photo/2019/02/19/19/45/thumbs-up-4007573_960_720.png";
                     document.getElementById("split2").appendChild(img);
                 }
-                window.__uspapi("getuspdata", 1, function(consent, success) { 
+                window.__uspapi("getUSPData", 1, function(consent, success) { 
                     if (   success
                         && consent.uspString.toUpperCase() !== USPSTR_YYN
                         && consent.uspString.toUpperCase() !== USPSTR_NYN) {
@@ -196,7 +196,7 @@
         let DontSell = false;
         let IsAgent = false;
         // get the cookie value
-        window.__uspapi("getuspdata", 1, function(consent, success) { 
+        window.__uspapi("getUSPData", 1, function(consent, success) { 
             if (success) {
                 optoutstr = consent.uspString.toUpperCase();
                 lspact = optoutstr[3];

@@ -20,9 +20,6 @@ const validStringRegExp = /^[1][nNyY-][nNyY-][nNyY-]$/;
 class UsprivacyString {
   constructor() {
     this.version = 1;
-    this.noticegiven = '-';
-    this.optedout = '-';
-    this.lspact = '-';      // Limited Service Provider Agreement Covered Transaction (LSPACT)
     this.baseString = null; // default is null
   }
   
@@ -38,10 +35,6 @@ class UsprivacyString {
   setUsprivacyString(newstr) {
     let didSet = false;
     if(validStringRegExp.test(newstr)) {
-      this.version = parseInt(newstr[0], 10);
-      this.noticegiven = newstr[1];
-      this.optedout = newstr[2];
-      this.lspact = newstr[3];
       this.baseString = newstr;
       didSet = true;
     }

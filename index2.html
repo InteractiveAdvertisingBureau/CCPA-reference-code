@@ -20,7 +20,7 @@ Case 1: Business declared CCPA doesn't apply
     setCookie();
 
     // check for user's optout
-    window.__uspapi("getuspdata", 1, function(consent, success) { 
+    window.__uspapi("getUSPData", 1, function(consent, success) { 
             if (success && consent.uspString === '1---') {
                 document.getElementById("section1").innerHTML = "uspstring = \"" + consent.uspString + "\" 🤔";
             } else {
@@ -37,7 +37,7 @@ Case 2: User did opt out, do not share data
     let tmpstr = "1YYY";
     setCookie(tmpstr);
     // check for user's optout
-    window.__uspapi("getuspdata", 1, function(consent, success) { 
+    window.__uspapi("getUSPData", 1, function(consent, success) { 
             if (success && consent.uspString === tmpstr) {
                 document.getElementById("section2").innerHTML = "uspString = \"" + consent.uspString + "\" 😟";
             } else {
@@ -54,7 +54,7 @@ Case 3: User didn't opt out, business as usual
     tmpstr = "1YNY"
     setCookie(tmpstr);
     // check for user's optout
-    window.__uspapi("getuspdata", 1, function(consent, success) { 
+    window.__uspapi("getUSPData", 1, function(consent, success) { 
                 if (success && consent.uspString === tmpstr) {
                 document.getElementById("section3").innerHTML = "uspString = \"" + consent.uspString + "\" 😊";
                 } else {
