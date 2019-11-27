@@ -121,5 +121,4 @@ function __handleUspapiMessage (event) {
   }
 }
 
-const listen = window.attachEvent || window.addEventListener;
-listen('message', __handleUspapiMessage, false);
+window.addEventListener('message', __handleUspapiMessage, false);

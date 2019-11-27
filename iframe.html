@@ -8,11 +8,10 @@
             }
         }, '*');
         
-        const listen = window.attachEvent || window.addEventListener;
-        listen('message', (event) => {
+        window.addEventListener('message', (event) => {
             const data = event && event.data && event.data.__uspapiReturn;
-            if (data && data.success)
-                if (data.returnValue.uspString) {
+            if (data)
+                if (data.success && data.returnValue.uspString) {
                     document.getElementById("result").innerHTML = "uspstring = \"" + data.returnValue.uspString + "\" 🤔";
                 } else {
                     document.getElementById("result").innerHTML = "error retrieving the uspString";
