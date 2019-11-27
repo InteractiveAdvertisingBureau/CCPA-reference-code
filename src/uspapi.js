@@ -13,8 +13,7 @@ let uspString = new UsprivacyString();
 // helper functions
 let getCookie = function(cookiename) {
   var name = cookiename + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var cookiearray = decodedCookie.split(';');
+  var cookiearray = document.cookie.split(';');
   for (var i = 0; i < cookiearray.length; i++) {
     var cookie = cookiearray[i];
     while (cookie.charAt(0) == ' ') {
@@ -27,65 +26,47 @@ let getCookie = function(cookiename) {
   return "";
 };
 
-const executePendingCalls = function(pendingCallbacks) {
-  // run any pending calls if there are any queued pending callbacks
-  if (pendingCallbacks.length) {
-    pendingCallbacks.forEach(function(cmd) {
-      try {
-          if (cmd) {
-            window.__usapi.apply(null, cmd);
-          }
-      } catch (nfe) {
-          console.error('Error running pending call: ' + nfe);
-      }
-    });
-
-  // Reset the queue (changing where the variable points to in memory)
-    pendingCallbacks = [];
-  }
-};
-
 let getuspdata = function(apiver, callback) {
-  if (
-    apiver !== null &&
-    apiver !== undefined &&
-    apiver != API_VERSION
-  ) {
-    if (typeof callback === 'function') 
-      callback(null, false);
-    return;
-  }
+  if (typeof callback === 'function') {
+    if (
+      apiver !== null &&
+      apiver !== undefined &&
+      apiver != API_VERSION
+    ) {
+      if (typeof callback === 'function') 
+        callback(null, false);
+      return;
+    }
 
-  // Get the data from the storage
-  let str1 = null;
-  if ((str1 = getCookie("us_privacy"))) {
-      if (!uspString.setUsprivacyString(str1)) {
-          console.log("Warning: uspString not set.");
-      }
-  } 
-
-  // get the uspstring and stuff it into the uspdata object
-  let str = null;
-  if ((str = uspString.getUsprivacyString())) {
-    if (typeof callback === 'function') {
-          callback(
-            {
-              version: uspString.getVersion(),
-              uspString: str
-            },
-            true
-          );
+    // Get the data from the storage
+    let str1 = null;
+    if ((str1 = getCookie("us_privacy"))) {
+        if (!uspString.setUsprivacyString(str1)) {
+            console.log("Warning: uspString not set.");
         }
+    } 
+
+    // get the uspstring and stuff it into the uspdata object
+    let str = uspString.getUsprivacyString();
+    if (str) {
+      callback(
+        {
+          version: uspString.getVersion(),
+          uspString: str
+        },
+        true
+      );
+    } else {
+      callback(
+        {
+          version: null,
+          uspString: null
+        },
+        false
+      );
+    }
   } else {
-      if (typeof callback === 'function') {
-        callback(
-          {
-            version: null,
-            uspString: null
-          },
-          false
-        );
-      }
+    console.error("__uspapi: callback parameter not a function"); 
   }
 };
 
@@ -108,18 +89,21 @@ window.__uspapi = new function (win) {
   }
 
   let api = function (cmd) {
-    return {
-      getuspdata: getuspdata,
-      __uspapi: function () {
-        return true;
-      }
-    }[cmd].apply(null, [].slice.call(arguments, 1));
+    try {
+        return {
+        getUSPData: getuspdata,
+        __uspapi: function () {
+          return true;
+        }
+      } [cmd].apply(null, [].slice.call(arguments, 1));
+    }
+    catch (err) {
+      console.error("__uspapi: Invalid command: ", cmd)
+    }
   };
 
   return api;
 } (window);
-
-executePendingCalls(pendingCalls);
 
 // register postMessage handler
 function __handleUspapiMessage (event) {
