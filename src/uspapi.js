@@ -104,3 +104,21 @@ window.__uspapi = new function (win) {
 
   return api;
 } (window);
+
+// register postMessage handler
+function __handleUspapiMessage (event) {
+  const data = event && event.data && event.data.__uspapiCall;
+  if (data) {
+    window.__uspapi(data.command, data.version, (returnValue, success) => {
+      event.source.postMessage({
+        __uspapiReturn: {
+          returnValue,
+          success,
+          callId: data.callId
+        }
+      });
+    });
+  }
+}
+
+window.addEventListener('message', __handleUspapiMessage, false);

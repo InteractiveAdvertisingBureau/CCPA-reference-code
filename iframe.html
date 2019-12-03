@@ -1,0 +1,25 @@
+<html>
+    <script>
+        window.addEventListener('message', (event) => {
+            const data = event && event.data && event.data.__uspapiReturn;
+            if (data)
+                if (data.success && data.returnValue.uspString) {
+                    document.getElementById("result").innerHTML = "uspstring = \"" + data.returnValue.uspString + "\" 🤔";
+                } else {
+                    document.getElementById("result").innerHTML = "error retrieving the uspString";
+                }
+        }, false);
+
+        window.top.postMessage({
+            __uspapiCall: {
+                callId: Math.random(),
+                command: 'getUSPData',
+                version: 1
+            }
+        }, '*');
+    </script>
+<body style="background-color: #e3f2fd">
+<b>iframe content</b>
+<p id="result"></p>
+</body>
+</html>
