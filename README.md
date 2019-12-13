@@ -1,5 +1,5 @@
 # CCPA-reference-code
-PRIVATE workspace for CCPA publisher code dev
+Public workspace for CCPA publisher code dev
 
 File usprivacy-string.js
     Implements class UsprivacyString
