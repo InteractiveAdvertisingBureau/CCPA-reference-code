@@ -116,7 +116,7 @@ function __handleUspapiMessage (event) {
           success,
           callId: data.callId
         }
-      });
+      }, '*');
     });
   }
 }
