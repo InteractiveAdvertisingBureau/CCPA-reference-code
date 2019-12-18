@@ -26,6 +26,35 @@ let getCookie = function(cookiename) {
   return "";
 };
 
+// function to dynamically add the "__uspapiLocator" frame to the window
+let addFrame = function() {
+  // if the frame does not already exist
+  if (!window.frames['__uspapiLocator']) {
+    // in case this is running in the <head>, make sure <body> exists
+    // (can't/shouldn't add a frame to the <head>
+    if (document.body) {
+      // create iframe and append it to <body>
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'display:none';
+      iframe.name = '__uspapiLocator';
+      document.body.appendChild(iframe);
+    } else {
+      /**
+       * Wait for the body tag to exist.
+       *
+       * Since this API "stub" is located in the <head>,
+       * setTimeout allows us to inject the iframe more
+       * quickly than relying on DOMContentLoaded or
+       * other events.
+       */
+      setTimeout(addFrame, 5);
+    }
+  }
+}
+
+// add the "__uspapiLocator" frame to the window
+addFrame();
+
 let getuspdata = function(apiver, callback) {
   if (typeof callback === 'function') {
     if (
