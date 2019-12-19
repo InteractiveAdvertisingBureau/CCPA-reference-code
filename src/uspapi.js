@@ -69,7 +69,7 @@ let getuspdata = function(apiver, callback) {
 
     // Get the data from the storage
     let str1 = null;
-    if ((str1 = getCookie("us_privacy"))) {
+    if ((str1 = getCookie("usprivacy"))) {
         if (!uspString.setUsprivacyString(str1)) {
             console.log("Warning: uspString not set.");
         }

@@ -7,13 +7,13 @@ Case 1: Business declared CCPA doesn't apply
 <br>
 <p id="section1"></p>
 <script>
-    // function to write the storage (us_privacy)
+    // function to write the storage (usprivacy)
     const EXDAYS = 30
     function setCookie(cvalue = "1---") {
         let d = new Date();
         d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
         let expires = "expires="+ d.toUTCString();
-        document.cookie = "us_privacy" + "=" + cvalue + ";" + expires + ";path=/";
+        document.cookie = "usprivacy" + "=" + cvalue + ";" + expires + ";path=/";
     }
 
     // set cookie to "1---" to get started...
