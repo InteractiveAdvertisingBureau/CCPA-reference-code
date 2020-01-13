@@ -2,7 +2,7 @@
  * IAB's Reference UspAPI reference implementation
  **/
 
-// impart the UsprivacyString class
+// import the UsprivacyString class
 import UsprivacyString from './usprivacy-string';
 
 // global vars
