@@ -1,26 +1,56 @@
 <html>
     <meta charset="UTF-8">
     <script>
+        function setResult(resultHtml) {
+            var res = document.getElementById("result");
+            if(res) {
+                res.innerHTML = resultHtml;
+            } else {
+                window.addEventListener('DOMContentLoaded', (e) => {
+                    setResult(resultHtml);
+                });
+            }
+        }
         window.addEventListener('message', (event) => {
             const data = event && event.data && event.data.__uspapiReturn;
             if (data)
                 if (data.success && data.returnValue.uspString) {
-                    document.getElementById("result").innerHTML = "uspstring = \"" + data.returnValue.uspString + "\" 🤔";
+                    setResult("uspstring = \"" + data.returnValue.uspString + "\" 🤔");
                 } else {
-                    document.getElementById("result").innerHTML = "error retrieving the uspString";
+                    setResult("error retrieving the uspString");
                 }
         }, false);
 
-        window.top.postMessage({
-            __uspapiCall: {
-                callId: Math.random(),
-                command: 'getUSPData',
-                version: 1
+        var frame = window;
+        var cmpFrame;
+
+        while(frame) {
+           try {
+               if(frame.frames['__uspapiLocator']) {
+                   cmpFrame = frame;
+                   break;
+               }
+            } catch(ignore) {}
+            if(frame === window.top) {
+                break;
             }
-        }, '*');
+            frame = frame.parent;
+        }
+
+        if(cmpFrame) {
+            cmpFrame.postMessage({
+                __uspapiCall: {
+                    callId: Math.random(),
+                    command: 'getUSPData',
+                    version: 1
+                }
+            }, '*');
+        } else {
+            setResult("could not find usapapiLocator frame ancestor");
+        }
     </script>
 <body style="background-color: #e3f2fd">
 <b>iframe content</b>
-<p id="result"></p>
+<p id="result">uspString not yet retrieved</p>
 </body>
 </html>
