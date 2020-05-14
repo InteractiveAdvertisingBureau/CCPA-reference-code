@@ -13,7 +13,7 @@
         let d = new Date();
         d.setTime(d.getTime() + (EXDAYS*24*60*60*1000));
         let expires = "expires="+ d.toUTCString();
-        document.cookie = "us_privacy" + "=" + cvalue + ";" + expires + ";path=/";
+        document.cookie = "usprivacy" + "=" + cvalue + ";" + expires + ";path=/";
     }
     // set cookie to "1---" to get started...
     setCookie();
